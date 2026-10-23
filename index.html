@@ -1387,24 +1387,74 @@
 
     </main>
 
-    <!-- FOOTER -->
-    <section class="conversion-strip text-white py-12 px-4">
-        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
-            <div class="md:col-span-8">
-                <p class="text-amber-300 text-xs font-extrabold uppercase tracking-widest">Corporate mobility • Personal travel • Events</p>
-                <h2 class="text-2xl sm:text-3xl font-extrabold mt-2">Get a tailored transport quote from CCRS</h2>
-                <p class="text-blue-100 mt-2 text-sm">Share your route, dates, vehicle category and monthly requirements. Our team can discuss availability and pricing with you.</p>
-            </div>
-            <div class="md:col-span-4 flex flex-col sm:flex-row md:flex-col gap-3">
-                <button onclick="navigateTo('booking')" class="bg-brandRed hover:bg-red-700 text-white font-bold px-6 py-3 rounded-xl shadow-lg transition"><i class="fa-solid fa-file-invoice-dollar mr-2"></i>Request a Quote</button>
-                <a href="mailto:booking@ccrs.co.in?subject=Corporate%20Transport%20Quotation%20Request" class="text-center bg-white/10 border border-white/30 hover:bg-white/20 font-bold px-6 py-3 rounded-xl transition"><i class="fa-solid fa-envelope mr-2"></i>Email Corporate Sales</a>
-            </div>
-        </div>
-    </section>
-
+    <!-- MAIN FOOTER SECTION -->
     <footer class="bg-brandNavy text-white border-t border-blue-900 mt-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <div class="border-t border-blue-900/80 pt-6 flex flex-col sm:flex-row justify-between items-center text-xs text-slate-400 gap-3">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Col 1: About & Logo -->
+                <div class="space-y-4">
+                    <div class="flex items-center gap-3">
+                        <svg width="36" height="36" viewBox="0 0 100 100">
+                            <circle cx="48" cy="52" r="38" fill="#0066cc" />
+                            <path d="M 12 55 Q 50 15 90 8 Q 65 35 15 68 Z" fill="#ffffff" />
+                            <path d="M 68 32 L 88 8 L 82 28 Z" fill="#e63946" />
+                        </svg>
+                        <div>
+                            <span class="block text-lg font-extrabold leading-tight">Classic Car Rentals</span>
+                            <span class="block text-[10px] font-bold text-brandRed uppercase tracking-widest">The Travel Experts</span>
+                        </div>
+                    </div>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        Classic Car Rental Service Pvt Ltd is a GST-registered transportation pioneer since 2014, providing PAN India corporate employee transit, luxury rentals, and long-term car leases.
+                    </p>
+                    <p class="text-xs text-emerald-400 font-semibold"><i class="fa-solid fa-registered"></i> GST Registered Enterprise</p>
+                </div>
+
+                <!-- Col 2: Navigation Links -->
+                <div>
+                    <h4 class="text-sm font-bold text-amber-400 uppercase tracking-wider mb-3">Quick Navigation</h4>
+                    <ul class="space-y-2 text-xs text-slate-300 font-medium">
+                        <li><button onclick="navigateTo('home')" class="hover:text-white transition">Home Page</button></li>
+                        <li><button onclick="navigateTo('about')" class="hover:text-white transition">About Corporate Journey</button></li>
+                        <li><button onclick="navigateTo('services')" class="hover:text-white transition">LTR & ETS Mobility</button></li>
+                        <li><button onclick="navigateTo('fleet')" class="hover:text-white transition">Luxury Fleet & Coaches</button></li>
+                        <li><button onclick="navigateTo('clients')" class="hover:text-white transition">Corporate Clients</button></li>
+                        <li><button onclick="navigateTo('careers')" class="hover:text-white transition">Careers & CV Submissions</button></li>
+                    </ul>
+                </div>
+
+                <!-- Col 3: Services & Amenities -->
+                <div>
+                    <h4 class="text-sm font-bold text-amber-400 uppercase tracking-wider mb-3">Services & Hospitality</h4>
+                    <ul class="space-y-2 text-xs text-slate-300 font-medium">
+                        <li>Long Term Rentals (26 Days / 2600 KM)</li>
+                        <li>Short Term & Airport Transfers (4h/40km)</li>
+                        <li>Employee Transportation Services (ETS)</li>
+                        <li>Luxury Wedding & Conference Mobility</li>
+                        <li>Complimentary Mineral Water & Facial Tissues</li>
+                        <li>24/7 GPS Security & Live Tracking</li>
+                    </ul>
+                </div>
+
+                <!-- Col 4: Corporate Address & Social -->
+                <div>
+                    <h4 class="text-sm font-bold text-amber-400 uppercase tracking-wider mb-3">Headquarters & Socials</h4>
+                    <address class="not-italic text-xs text-slate-300 space-y-2">
+                        <p><i class="fa-solid fa-building text-brandRed mr-1.5"></i> Splendor Tower 2, 4th Floor, Unit 401-402, Golf Course Extn. Rd, Sector 58, Gurgaon, Haryana 122102</p>
+                        <p><i class="fa-solid fa-phone text-emerald-400 mr-1.5"></i> +91 96543 62430 / +91 72909 91912</p>
+                        <p><i class="fa-solid fa-envelope text-sky-400 mr-1.5"></i> sandeep@ccrs.co.in</p>
+                    </address>
+                    <div class="pt-3 flex gap-3 text-base text-slate-300">
+                        <a href="https://ccrs.co.in" target="_blank" title="Website" class="hover:text-sky-400 transition"><i class="fa-solid fa-globe"></i></a>
+                        <a href="https://www.instagram.com/ccrs.car.rental/" target="_blank" title="Instagram ccrs.car.rental" class="hover:text-pink-400 transition"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="https://www.instagram.com/classic_car_rental_services/" target="_blank" title="Instagram classic_car_rental_services" class="hover:text-rose-400 transition"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="https://www.linkedin.com/company/classic-car-rental-pvt-ltd/" target="_blank" title="LinkedIn" class="hover:text-blue-400 transition"><i class="fa-brands fa-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- COPYRIGHT & REQUIRED CREATOR STATEMENT -->
+            <div class="border-t border-blue-900/80 mt-10 pt-6 flex flex-col sm:flex-row justify-between items-center text-xs text-slate-400 gap-3">
                 <p>© 2026 Classic Car Rental Service Pvt Ltd. All rights reserved.</p>
                 <div class="bg-blue-950 px-4 py-2 rounded-xl border border-blue-800 text-center font-bold text-white shadow-inner">
                     This website is created by Rahul Maurya.
@@ -1413,11 +1463,11 @@
         </div>
     </footer>
 
+    <!-- FLOATING QUICK CONTACT -->
     <div class="float-contact" aria-label="Quick contact">
         <a class="wa" href="https://wa.me/919654362430?text=Hello%20CCRS%2C%20I%20would%20like%20a%20quotation." target="_blank" rel="noopener noreferrer" aria-label="Chat with CCRS on WhatsApp"><i class="fa-brands fa-whatsapp text-xl"></i><span>WhatsApp Quote</span></a>
         <a class="call" href="tel:+919654362430" aria-label="Call CCRS"><i class="fa-solid fa-phone"></i><span>Call CCRS</span></a>
     </div>
-
     <!-- OWNER / ADMIN LOGIN MODAL -->
     <div id="modal-admin-login" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
         <div class="bg-white rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl relative">
