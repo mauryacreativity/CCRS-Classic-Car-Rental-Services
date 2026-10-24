@@ -87,9 +87,7 @@
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #f1f5f9; }
         ::-webkit-scrollbar-thumb { background: #0066cc; border-radius: 4px; }
-        
-        .online-dot { height: 8px; width: 8px; background-color: #22c55e; border-radius: 50%; display: inline-block; box-shadow: 0 0 6px #22c55e; }
-.offline-dot { height: 8px; width: 8px; background-color: #cbd5e1; border-radius: 50%; display: inline-block; }
+
         .page-section { display: none; }
         .page-section.active { display: block; animation: fadeIn 0.3s ease-in-out; }
 
@@ -105,6 +103,9 @@
         .float-contact a:hover { transform: translateY(-2px); }
         .float-contact .wa { background: #16a34a; }
         .float-contact .call { background: #0f2c59; }
+
+        .online-dot { height: 8px; width: 8px; background-color: #22c55e; border-radius: 50%; display: inline-block; box-shadow: 0 0 6px #22c55e; }
+        .offline-dot { height: 8px; width: 8px; background-color: #cbd5e1; border-radius: 50%; display: inline-block; }
 
         @media(max-width: 640px) {
             .float-contact { right: 10px; bottom: 10px; }
@@ -506,10 +507,8 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
  
-        <!-- 5 DEPARTMENTS OF THE COMPANY -->
+                <!-- 5 DEPARTMENTS OF THE COMPANY (Shifted inside About Us) -->
                 <div class="border-t border-slate-200 pt-10">
                     <div class="text-center mb-8">
                         <span class="text-xs font-bold text-brandRed uppercase tracking-widest">Organizational Structure</span>
@@ -1166,7 +1165,7 @@
             </div>
         </section>
 
-             <!-- ==================== 11. CONTACT US PAGE ==================== -->
+        <!-- ==================== 11. CONTACT US PAGE ==================== -->
         <section id="page-contact" class="page-section">
             <div class="bg-brandNavy text-white py-12 px-4">
                 <div class="max-w-7xl mx-auto text-center">
@@ -1261,6 +1260,7 @@
                 </div>
             </div>
         </section>
+
         <!-- ==================== 12. ADMIN / OWNER DASHBOARD PAGE ==================== -->
         <section id="page-admin" class="page-section">
             <div class="bg-brandNavy text-white py-12 px-4">
@@ -1303,7 +1303,7 @@
                     </div>
 
                     <!-- Create Sub-Admin Profile -->
-                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+                    <div id="create-subadmin-card" class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
                         <h3 class="text-base font-bold text-brandNavy flex items-center gap-2">
                             <i class="fa-solid fa-user-plus text-emerald-600"></i> Create Sub-Admin Profile
                         </h3>
@@ -1320,6 +1320,25 @@
                                 Create Sub-Admin Profile
                             </button>
                         </form>
+                    </div>
+                </div>
+
+                <!-- SUB-ADMIN MANAGEMENT LIST (Visible to Admin/Owner) -->
+                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-4">
+                    <h3 class="text-base font-bold text-brandNavy flex items-center gap-2">
+                        <i class="fa-solid fa-users-gear text-brandBlue"></i> Sub-Admin Accounts & Online Status (<span id="subadmin-count">0</span>)
+                    </h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs border-collapse">
+                            <thead>
+                                <tr class="bg-slate-100 text-slate-700 border-b border-slate-200">
+                                    <th class="p-2.5">Username</th>
+                                    <th class="p-2.5">Status</th>
+                                    <th class="p-2.5 text-right owner-action-col">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="subadmins-tbody" class="divide-y divide-slate-100 text-slate-600"></tbody>
+                        </table>
                     </div>
                 </div>
 
@@ -1465,11 +1484,12 @@
         </div>
     </footer>
 
-    <!-- FLOATING QUICK CONTACT -->
+   <!-- FLOATING QUICK CONTACT -->
     <div class="float-contact" aria-label="Quick contact">
         <a class="wa" href="https://wa.me/919654362430?text=Hello%20CCRS%2C%20I%20would%20like%20a%20quotation." target="_blank" rel="noopener noreferrer" aria-label="Chat with CCRS on WhatsApp"><i class="fa-brands fa-whatsapp text-xl"></i><span>WhatsApp Quote</span></a>
         <a class="call" href="tel:+919654362430" aria-label="Call CCRS"><i class="fa-solid fa-phone"></i><span>Call CCRS</span></a>
     </div>
+
     <!-- OWNER / ADMIN LOGIN MODAL -->
     <div id="modal-admin-login" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
         <div class="bg-white rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl relative">
@@ -1622,10 +1642,20 @@
         function successLoginActions() {
             closeAdminModal();
             document.getElementById('admin-btn-text').innerText = 'Dashboard';
+            
+            let activeSessions = JSON.parse(localStorage.getItem('ccrs_active_sessions') || '{}');
+            activeSessions[currentAuthSession.user] = { role: currentAuthSession.role, lastActive: new Date().getTime() };
+            localStorage.setItem('ccrs_active_sessions', JSON.stringify(activeSessions));
+
             navigateTo('admin');
         }
 
         function adminLogout() {
+            if (currentAuthSession) {
+                let activeSessions = JSON.parse(localStorage.getItem('ccrs_active_sessions') || '{}');
+                delete activeSessions[currentAuthSession.user];
+                localStorage.setItem('ccrs_active_sessions', JSON.stringify(activeSessions));
+            }
             currentAuthSession = null;
             document.getElementById('admin-btn-text').innerText = 'Admin Login';
             showModal('Logged Out', 'Successfully logged out of the dashboard.');
@@ -1649,11 +1679,11 @@
             e.target.reset();
         }
 
-        // Owner Create Sub-Admin Feature
+        // Owner Create Sub-Admin Feature (Restricted from Sub-Admins)
         function handleCreateSubAdmin(e) {
             e.preventDefault();
             if (!currentAuthSession || currentAuthSession.role !== 'owner') {
-                showModal('Access Denied', 'Only the primary owner can create sub-admin profiles.');
+                showModal('Access Denied', 'Sub-admins do not have permission to create new sub-admin accounts.');
                 return;
             }
 
@@ -1671,21 +1701,81 @@
             localStorage.setItem('ccrs_subadmins', JSON.stringify(subAdmins));
             showModal('Sub-Admin Created', `Sub-admin profile "${subUser}" created successfully!`);
             e.target.reset();
+            renderAdminDashboard();
+        }
+
+        // Owner Delete Sub-Admin Feature (Restricted from Sub-Admins)
+        function deleteSubAdmin(username) {
+            if (!currentAuthSession || currentAuthSession.role !== 'owner') {
+                showModal('Access Denied', 'Only the primary owner can delete sub-admin accounts.');
+                return;
+            }
+            if (confirm(`Are you sure you want to delete sub-admin "${username}"?`)) {
+                let subAdmins = JSON.parse(localStorage.getItem('ccrs_subadmins') || '[]');
+                subAdmins = subAdmins.filter(s => s.user !== username);
+                localStorage.setItem('ccrs_subadmins', JSON.stringify(subAdmins));
+                
+                let activeSessions = JSON.parse(localStorage.getItem('ccrs_active_sessions') || '{}');
+                delete activeSessions[username];
+                localStorage.setItem('ccrs_active_sessions', JSON.stringify(activeSessions));
+
+                renderAdminDashboard();
+                showModal('Deleted', `Sub-admin "${username}" has been removed.`);
+            }
         }
 
         function renderAdminDashboard() {
             const roleBadge = document.getElementById('current-logged-role');
             const ownerSettings = document.getElementById('owner-settings-wrapper');
+            const createSubCard = document.getElementById('create-subadmin-card');
+            const actionCols = document.querySelectorAll('.owner-action-col');
 
             if (currentAuthSession && currentAuthSession.role === 'owner') {
                 roleBadge.innerText = 'Role: Owner (' + currentAuthSession.user + ')';
-                ownerSettings.style.display = 'grid'; // Show owner controls
+                ownerSettings.style.display = 'grid';
+                if (createSubCard) createSubCard.style.display = 'block';
+                actionCols.forEach(el => el.style.display = 'table-cell');
             } else {
                 roleBadge.innerText = 'Role: Sub-Admin (' + (currentAuthSession ? currentAuthSession.user : '') + ')';
-                ownerSettings.style.display = 'none'; // Hide owner controls for sub-admins
+                ownerSettings.style.display = 'none';
+                if (createSubCard) createSubCard.style.display = 'none'; // Sub-admin restriction
+                actionCols.forEach(el => el.style.display = 'none');
             }
 
+            renderSubAdminsTable();
             renderAdminTables();
+        }
+
+        function renderSubAdminsTable() {
+            const subAdmins = JSON.parse(localStorage.getItem('ccrs_subadmins') || '[]');
+            const activeSessions = JSON.parse(localStorage.getItem('ccrs_active_sessions') || '{}');
+            const currentTime = new Date().getTime();
+
+            document.getElementById('subadmin-count').innerText = subAdmins.length;
+            const tbody = document.getElementById('subadmins-tbody');
+
+            if (subAdmins.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="3" class="p-4 text-center text-slate-400">No sub-admin accounts created yet.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = subAdmins.map(sub => {
+                const isOnline = activeSessions[sub.user] && (currentTime - activeSessions[sub.user].lastActive < 30 * 60 * 1000);
+                const statusHtml = isOnline ? 
+                    `<span class="inline-flex items-center gap-1.5 text-emerald-600 font-bold"><span class="online-dot"></span> Online</span>` : 
+                    `<span class="inline-flex items-center gap-1.5 text-slate-400"><span class="offline-dot"></span> Offline</span>`;
+                
+                const deleteBtnHtml = (currentAuthSession && currentAuthSession.role === 'owner') ? 
+                    `<button onclick="deleteSubAdmin('${escapeHTML(sub.user)}')" class="px-3 py-1 bg-rose-100 text-rose-700 hover:bg-rose-200 font-bold rounded-lg transition"><i class="fa-solid fa-trash mr-1"></i> Delete</button>` : '';
+
+                return `
+                    <tr>
+                        <td class="p-2.5 font-bold text-brandNavy">${escapeHTML(sub.user)}</td>
+                        <td class="p-2.5">${statusHtml}</td>
+                        <td class="p-2.5 text-right owner-action-col">${deleteBtnHtml}</td>
+                    </tr>
+                `;
+            }).join('');
         }
 
         function handleQuickEstimate(e) {
